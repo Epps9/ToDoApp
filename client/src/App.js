@@ -1,10 +1,13 @@
 import React from 'react';
 import io from 'socket.io-client';
 
-
 class App extends React.Component {
-  constructor() {
+  /*constructor() {
     super();
+    this.socket = io('localhost:3000');
+  }*/
+
+  componentDidMount = () => {
     this.socket = io('localhost:8000');
   }
   
