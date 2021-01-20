@@ -3,8 +3,6 @@ const app = express();
 const path = require('path');
 const socket = require('socket.io');
 
-socket.connect('http://localhost:3000/');
-
 
 const tasks = [];
 
@@ -22,7 +20,9 @@ const server = app.listen(process.env.PORT || 8000, () => {
 
 app.use((req, res) => {
     res.status(404).send({message: 'Not found...'});
-  })
+  });
+
+  
 const io = socket(server);
 
 
