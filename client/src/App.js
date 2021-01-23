@@ -1,42 +1,57 @@
 import React from 'react';
 import io from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 
 class App extends React.Component {
   state = {
     tasks: [{id: 0, name: 'Do something'}],
-    taskName: '',
+    taskData: {
+      id: '',
+      name: ''
+    },
   }
 
   componentDidMount = () => {
     this.socket = io.connect('localhost:8000');
+    this.socket.on('updateTasks', (tasks) => this.updateTasks(tasks));
+    this.socket.on('addTask', (task) => this.addTask(task));
+    this.socket.on('removeTaskServer', (tasks) => this.updateTasks(tasks));
   }  
+
+  updateTasks(tasks){
+    this.setState({
+      ...this.state,
+      tasks: tasks,
+    });
+  };
 
   removeTask (id) {
     this.setState({
       ...this.state,
       tasks: this.state.tasks.filter(task => task.is === id)
     });
-    this.socket.emit('removeTask', id);
-  }
+    this.socket.emit('removeTask', id)
+  };
 
-  updateTaskName (event) {
+
+  updateTaskData (event) {
     this.setState({
       ...this.state,
-      taskName: event.target.value,
-    })
+      taskData: {id: uuidv4(), name: event.target.value},
+    });
   }
 
   submitForm (event) {
     event.preventDefault();
-    this.addTask(this.state.taskName);
-    this.socket.emit('addTask', this.state.taskName);
+    this.addTask(this.state.taskData);
+    this.socket.emit('addTask', this.state.taskData);
   }
 
     addTask(task) {
       this.setState(state =>({
         ...state,
-        tasks: [...state.tasks, {id: task.id, taskName: task.name}]
+        tasks: [...state.tasks, {id: task.id, name: task.name}]
       }));
     }
   
@@ -60,7 +75,7 @@ class App extends React.Component {
       </ul>
 
       <form id="add-task-form">
-        <input className="text-input" autoComplete="off" type="text" placeholder="Type your description" id="task-name" value={this.state.taskName} onChange={(event) => this.updateTaskName(event)}/>
+        <input className="text-input" autoComplete="off" type="text" placeholder="Type your description" id="task-name"  onChange={(event) => this.updateTaskData(event)} />
         <button className="btn" type="submit" onClick={(event) => this.submitForm(event)}>Add</button>
       </form>
     </section>

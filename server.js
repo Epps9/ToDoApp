@@ -35,6 +35,6 @@ io.on('connection', (socket) => {
   });
   socket.on('removeTask', (index) => {
     tasks.splice(index, 1);
-    socket.broadcast.emit('updateTask', tasks);
+    socket.broadcast.emit('removeTaskServer', tasks);
   })
 })
