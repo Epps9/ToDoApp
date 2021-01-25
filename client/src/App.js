@@ -29,7 +29,7 @@ class App extends React.Component {
   removeTask (id) {
     this.setState({
       ...this.state,
-      tasks: this.state.tasks.filter(task => task.is === id)
+      tasks: this.state.tasks.filter(task => task.id !== id)
     });
     this.socket.emit('removeTask', id)
   };
