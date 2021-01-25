@@ -27,13 +27,15 @@ const io = socket(server);
 
 
 io.on('connection', (socket) => {
-  console.log('I am communicating!!!')
-  socket.emit('updateDate', tasks);
+  console.log('I am communicating !!!')
+  socket.emit('updateTasks', tasks);
   socket.on('addTask', (task) => {
     tasks.push(task);
-    socket.broadcast.emit('updateTasks', tasks)
+    socket.broadcast.emit('addTask', task);
+    console.log('Im adding the task')
   });
   socket.on('removeTask', (index) => {
+    console.log('Im removing the task')
     tasks.splice(index, 1);
     socket.broadcast.emit('removeTaskServer', tasks);
   })
