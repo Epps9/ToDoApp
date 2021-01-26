@@ -14,12 +14,15 @@ class App extends React.Component {
 
   componentDidMount = () => {
     this.socket = io.connect('localhost:8000');
+    console.log('socket socket socket');
     this.socket.on('updateTasks', (tasks) => this.updateTasks(tasks));
     this.socket.on('addTask', (task) => this.addTask(task));
     this.socket.on('removeTaskServer', (tasks) => this.updateTasks(tasks));
   }  
 
   updateTasks(tasks){
+    console.log('tasks', tasks)
+
     this.setState({
       ...this.state,
       tasks: tasks,
@@ -46,6 +49,7 @@ class App extends React.Component {
     event.preventDefault();
     this.addTask(this.state.taskData);
     this.socket.emit('addTask', this.state.taskData);
+    console.log('its working');
   }
 
     addTask(task) {
